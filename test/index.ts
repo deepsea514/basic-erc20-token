@@ -1,4 +1,4 @@
-import { assert } from "chai";
+import { assert, expect } from "chai";
 import { ethers } from "hardhat";
 
 const INITAIL_SUPPLY = 1000000;
@@ -55,12 +55,6 @@ describe("BRIGHT TOKEN", function () {
 
         await token.lock(singers[1].address);
 
-        try {
-            await token.connect(singers[1]).transfer(singers[0].address, 40000);
-            assert(false, "Locked account is sending token.");
-        } catch (error) {
-            // console.error(error);
-            assert(true);
-        }
+        expect(token.connect(singers[1]).transfer(singers[0].address, 40000)).to.be.revertedWith("Transfer from the locked address");
     })
 });
