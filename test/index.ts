@@ -47,7 +47,7 @@ describe("BRIGHT TOKEN", function () {
         assert(beforeBalance.sub(afterBalance).toNumber() == TRANSFER_AMOUNT, "Transfer amount is not matching.");
     })
 
-    it("Lock Token", async function () {
+    it("Prevent to send token from locked account.", async function () {
         const BRIGHTTOKEN = await ethers.getContractFactory("BRIGHTTOKEN");
         const token = await BRIGHTTOKEN.deploy();
         await token.deployed();
@@ -55,6 +55,17 @@ describe("BRIGHT TOKEN", function () {
 
         await token.lock(singers[1].address);
 
-        expect(token.connect(singers[1]).transfer(singers[0].address, 40000)).to.be.revertedWith("Transfer from the locked address");
+        expect(token.connect(singers[1]).transfer(singers[0].address, 40000)).to.be.revertedWith("Transfer from locked account.");
+    })
+
+    it("Prevent to send token to locked account.", async function () {
+        const BRIGHTTOKEN = await ethers.getContractFactory("BRIGHTTOKEN");
+        const token = await BRIGHTTOKEN.deploy();
+        await token.deployed();
+        const singers = await ethers.getSigners();
+
+        await token.lock(singers[1].address);
+
+        expect(token.connect(singers[0]).transfer(singers[1].address, 40000)).to.be.revertedWith("Transfer to locked account.");
     })
 });
