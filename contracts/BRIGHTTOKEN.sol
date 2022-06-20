@@ -25,7 +25,7 @@ contract BRIGHTTOKEN is Ownable, ERC20 {
      * @dev Constructor
      */
     constructor() ERC20("BRIGHT TOKEN", "BGT") {
-        _mint(_msgSender(), 1000000 * decimals());
+        _mint(_msgSender(), 1000000 * (10**decimals()));
     }
 
     function decimals() public pure override returns (uint8) {
