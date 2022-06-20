@@ -44,6 +44,6 @@ function copyEnvVariable() {
     fs.writeFileSync("frontend/.env", env);
 }
 
-copyFolderRecursiveSync("artifacts", "frontend");
-copyFolderRecursiveSync("typechain", "frontend");
+copyFolderRecursiveSync("artifacts", "frontend/src");
+copyFolderRecursiveSync("typechain", "frontend/src");
 copyEnvVariable();
