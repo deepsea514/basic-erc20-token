@@ -37,7 +37,7 @@ type DappStatus = {
     txBeingSent: string | null;
     transactionError: string | null;
     networkError: string | null;
-
+    isInTransaction: boolean;
     _provider?: ethers.providers.Web3Provider | undefined;
     _token?: BRIGHTTOKEN | undefined;
     _factory?: PresaleFactory | undefined;
@@ -52,6 +52,7 @@ const initialState: DappStatus = {
     txBeingSent: null,
     transactionError: null,
     networkError: null,
+    isInTransaction: false
 }
 
 export class Dapp extends React.Component<any, DappStatus> {
@@ -170,6 +171,7 @@ export class Dapp extends React.Component<any, DappStatus> {
 
     _purchaseTokens = async (amount: number) => {
         const { tokenData, _usdc, _factory } = this.state;
+        this.setState({ isInTransaction: true });
         try {
             this._dismissTransactionError();
 
@@ -195,7 +197,7 @@ export class Dapp extends React.Component<any, DappStatus> {
             console.error(error);
             this.setState({ transactionError: error });
         } finally {
-            this.setState({ txBeingSent: null });
+            this.setState({ txBeingSent: null, isInTransaction: false });
         }
     }
 
@@ -234,6 +236,7 @@ export class Dapp extends React.Component<any, DappStatus> {
     render() {
         const {
             account, networkError, tokenData, balance, txBeingSent, transactionError,
+            isInTransaction
         } = this.state;
 
         if (window.ethereum === undefined) {
@@ -293,6 +296,7 @@ export class Dapp extends React.Component<any, DappStatus> {
                     <div className="col-12">
                         <Transfer purchaseTokens={this._purchaseTokens}
                             tokenSymbol={tokenData.symbol}
+                            isInTransaction={isInTransaction}
                         />
                     </div>
                 </div>

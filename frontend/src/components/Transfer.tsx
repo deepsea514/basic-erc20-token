@@ -3,9 +3,10 @@ import React, { FC, useState } from "react";
 type TransferProps = {
     purchaseTokens: (amount: number) => void;
     tokenSymbol: string;
+    isInTransaction: boolean;
 }
 
-export const Transfer: FC<TransferProps> = ({ purchaseTokens, tokenSymbol }) => {
+export const Transfer: FC<TransferProps> = ({ purchaseTokens, tokenSymbol, isInTransaction }) => {
     const [amount, setAmount] = useState('10');
 
     return (
@@ -32,7 +33,9 @@ export const Transfer: FC<TransferProps> = ({ purchaseTokens, tokenSymbol }) => 
                     />
                 </div>
                 <div className="form-group">
-                    <button className="btn btn-primary" type="submit" >Buy Token</button>
+                    <button className="btn btn-primary"
+                        type="submit"
+                        disabled={isInTransaction}>Buy Token</button>
                 </div>
             </form >
         </div >
