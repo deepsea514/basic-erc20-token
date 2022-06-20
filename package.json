@@ -8,8 +8,8 @@
     "deploy": "npx hardhat run scripts/deploy.ts --network rinkeby",
     "test": "npx hardhat test",
     "copy": "tsc scripts/copy.ts & node scripts/copy.js",
-    "build": "npm run copy & cd frontend & npm run build",
-    "start": "npm run copy & cd frontend & npm start"
+    "build": "npm run compile & npm run copy & cd frontend & npm run build",
+    "start": "npm run compile & npm run copy & cd frontend & npm start"
   },
   "keywords": [],
   "author": "",
