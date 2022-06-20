@@ -40,7 +40,11 @@ function copyEnvVariable() {
     const USDC_ADDRESS = process.env.USDC_ADDRESS;
     const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS;
     const FACTORY_ADDRESS = process.env.FACTORY_ADDRESS;
-    const env = `REACT_APP_USDC_ADDRESS=${USDC_ADDRESS}\nREACT_APP_TOKEN_ADDRESS=${TOKEN_ADDRESS}\nREACT_APP_FACTORY_ADDRESS=${FACTORY_ADDRESS}\n`;
+    const NETWORK_ID = process.env.NETWORK_ID;
+    const env = `REACT_APP_USDC_ADDRESS=${USDC_ADDRESS}\n
+    REACT_APP_TOKEN_ADDRESS=${TOKEN_ADDRESS}\n
+    REACT_APP_FACTORY_ADDRESS=${FACTORY_ADDRESS}\n
+    REACT_APP_NETWORK_ID=${NETWORK_ID}`;
     fs.writeFileSync("frontend/.env", env);
 }
 
