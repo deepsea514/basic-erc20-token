@@ -1,5 +1,5 @@
 {
-  "name": "my-token",
+  "name": "basic-erc20-token",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
