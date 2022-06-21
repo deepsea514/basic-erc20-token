@@ -19,12 +19,14 @@ async function main() {
     if (process.env.FACTORY_ADDRESS) {
         factory = await (await ethers.getContractAt("PresaleFactory", process.env.FACTORY_ADDRESS!)).deployed();
     } else {
+        const presaleDate = parseInt((new Date().getTime() / 1000).toString());
         factory = await (await ethers.getContractFactory("PresaleFactory")).deploy(
-            parseInt((new Date().getTime() / 1000).toString()),
+            presaleDate,
             token.address,
             process.env.USDC_ADDRESS!
         );
         console.log("Factory Address: ", factory.address);
+        console.log("Presale Date:", presaleDate);
         const balance = await token.balanceOf(singers[0].address);
         await token.transfer(factory.address, balance);
     }
