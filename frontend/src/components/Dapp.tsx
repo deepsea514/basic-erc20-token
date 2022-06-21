@@ -175,7 +175,7 @@ export class Dapp extends React.Component<any, DappStatus> {
         try {
             this._dismissTransactionError();
 
-            const totalPrice = tokenData!.price.mul(amount / 10);
+            const totalPrice = tokenData!.price.mul(amount);
             await _usdc!.approve(FACTORY_ADDRESS!, totalPrice);
 
             const tx = await _factory?.purchaseToken(amount);

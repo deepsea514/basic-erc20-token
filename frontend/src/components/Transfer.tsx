@@ -7,7 +7,7 @@ type TransferProps = {
 }
 
 export const Transfer: FC<TransferProps> = ({ purchaseTokens, tokenSymbol, isInTransaction }) => {
-    const [amount, setAmount] = useState('10');
+    const [amount, setAmount] = useState('1');
 
     return (
         <div>
@@ -19,14 +19,14 @@ export const Transfer: FC<TransferProps> = ({ purchaseTokens, tokenSymbol, isInT
                 }
             }}>
                 <div className="form-group">
-                    <label>Amount of {tokenSymbol}</label>
+                    <label>Amount of Ticket(10 {tokenSymbol} Per Ticket)</label>
                     <input
                         className="form-control"
                         type="number"
-                        step="10"
+                        step="1"
                         name="amount"
-                        min={10}
-                        placeholder="10"
+                        min={1}
+                        placeholder="1"
                         value={amount}
                         onChange={(evt) => setAmount(evt.target.value)}
                         required
@@ -35,7 +35,7 @@ export const Transfer: FC<TransferProps> = ({ purchaseTokens, tokenSymbol, isInT
                 <div className="form-group">
                     <button className="btn btn-primary"
                         type="submit"
-                        disabled={isInTransaction}>Buy Token</button>
+                        disabled={isInTransaction}>Buy Ticket</button>
                 </div>
             </form >
         </div >
