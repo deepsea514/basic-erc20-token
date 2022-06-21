@@ -5,7 +5,7 @@ const DECIMALS = 6;
 const INITAIL_SUPPLY = 1000000 * Math.pow(10, DECIMALS);
 const TRANSFER_AMOUNT = 500000 * Math.pow(10, DECIMALS);
 const PURCHASE_TOKEN_AMOUNT = 10;
-const PURCHASE_TOKEN_UNIT = 10;
+const PURCHASE_TOKEN_UNIT = 10000000;
 
 var tokenAddress: string | null = null;
 var payTokenAddress: string | null = null;
@@ -94,12 +94,11 @@ describe("Presale Token", function () {
         await token.transfer(factory.address, balance);
 
         const price = await factory.getPresalePrice();
-        await payToken.approve(factory.address, price.mul(PURCHASE_TOKEN_AMOUNT / PURCHASE_TOKEN_UNIT));
+        await payToken.approve(factory.address, price.mul(PURCHASE_TOKEN_AMOUNT));
         await factory.purchaseToken(PURCHASE_TOKEN_AMOUNT);
 
         const tokenBalance = await token.balanceOf(singer[0].address);
-        const decimals = await token.decimals();
-        assert(tokenBalance.toNumber() == PURCHASE_TOKEN_AMOUNT * Math.pow(10, decimals), "Token is not transferred.");
+        assert(tokenBalance.toNumber() == PURCHASE_TOKEN_AMOUNT * PURCHASE_TOKEN_UNIT, "Token is not transferred.");
     })
 
     it("Purchase Token without allowance.", async function () {

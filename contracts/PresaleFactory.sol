@@ -13,13 +13,14 @@ contract PresaleFactory is Ownable {
     uint256 private _presalePrice;
     BRIGHTTOKEN private immutable _presaleToken;
     ERC20 private immutable _payToken;
-    uint256 private constant PRESALE_UNIT = 10;
+    uint256 private constant PRESALE_UNIT = 10_000_000;
 
     modifier presaleAvailable(uint256 amount_) {
         require(block.timestamp > _presaleDate, "Presale is not started yet.");
         require(amount_ > 0, "Amount should be greater than 0.");
 
-        uint256 payAmount = (amount_ * _presalePrice) / PRESALE_UNIT;
+        uint256 payAmount = amount_ * _presalePrice;
+        uint256 buyAmount = amount_ * PRESALE_UNIT;
         require(
             _payToken.balanceOf(_msgSender()) >= payAmount,
             "Insufficent USDC balance."
@@ -28,14 +29,7 @@ contract PresaleFactory is Ownable {
             _payToken.allowance(_msgSender(), address(this)) >= payAmount,
             "Should Approve the token."
         );
-        require(
-            remainingPresale() >= amount_ * (10**_presaleToken.decimals()),
-            "Insufficient Token."
-        );
-        require(
-            amount_ % PRESALE_UNIT == 0,
-            "Token is sold with the unit of 10."
-        );
+        require(remainingPresale() >= buyAmount, "Insufficient Token.");
         _;
     }
 
@@ -55,7 +49,7 @@ contract PresaleFactory is Ownable {
         require(payToken_ != address(0), "Please provide valid token");
         _presaleToken = BRIGHTTOKEN(presaleToken_);
         _payToken = ERC20(payToken_);
-        setPresalePrice(5);
+        setPresalePrice(5_000_000);
         setPresaleDate(presaleDate_);
     }
 
@@ -74,17 +68,13 @@ contract PresaleFactory is Ownable {
         return _presalePrice;
     }
 
-    function getPresaleUnit() external view returns (uint256) {
-        return PRESALE_UNIT * (10**_presaleToken.decimals());
-    }
-
     /**
      * @dev Set Presale Price
      *
-     * @param price_ New Price with USD. It is not considered with decimal. So put 5 if $5
+     * @param price_ New Price with USD.
      */
     function setPresalePrice(uint256 price_) public onlyOwner {
-        _presalePrice = price_ * (10**_payToken.decimals());
+        _presalePrice = price_;
     }
 
     function setPresaleDate(uint256 presaleDate_) public onlyOwner {
@@ -94,12 +84,16 @@ contract PresaleFactory is Ownable {
     /**
      * @dev Purchase Token.
      *
-     * @param amount_ Amount to purchase. It should be unit of 10 and not considered decimals.
+     * @param amount_ Tick Count to purchase.
      */
     function purchaseToken(uint256 amount_) external presaleAvailable(amount_) {
-        uint256 buyAmount = amount_ * (10**_presaleToken.decimals());
-        uint256 payAmount = (amount_ * _presalePrice) / PRESALE_UNIT;
+        uint256 buyAmount = amount_ * PRESALE_UNIT;
+        uint256 payAmount = amount_ * _presalePrice;
         _payToken.transferFrom(_msgSender(), address(this), payAmount);
         _presaleToken.transfer(_msgSender(), buyAmount);
+    }
+
+    function withdrawUSDCToken() external onlyOwner {
+        _payToken.transfer(_msgSender(), _payToken.balanceOf(_msgSender()));
     }
 }
